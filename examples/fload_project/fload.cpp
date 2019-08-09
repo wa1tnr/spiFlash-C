@@ -59,16 +59,27 @@ void reading(void) {
   }
 }
 
-#define SUPL_FILES
-#undef SUPL_FILES
-
-#ifndef SUPL_FILES
 void fl_setup(void) {
-  reading();
-  delay(100); // dummy
-}
-#endif
+  Serial.begin(115200);
+  while (!Serial) {
+    delay(100);
+  }
+  Serial.println("shred dcmvaa");
+  Serial.println("Adafruit SPI Flash FatFs Simple File Printing Example");
 
-#ifdef SUPL_FILES
-#include "hidden-extra.h"
-#endif
+  if (!flash.begin()) {
+    Serial.println("Error");
+    while(1);
+  }
+  Serial.print("Flash chip JEDEC ID: 0x"); Serial.println(flash.getJEDECID(), HEX);
+
+  if (!fatfs.begin(&flash)) {
+    Serial.println("Error");
+    while(1);
+  }
+  Serial.println("Mounted filesystem ok");
+
+  File dataFile = fatfs.open(FILE_NAME, FILE_READ);
+  thisFile = (File) dataFile; // copy the file handle to a global
+  reading();
+}
