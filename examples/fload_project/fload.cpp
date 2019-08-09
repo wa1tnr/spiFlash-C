@@ -45,13 +45,26 @@ FatFileSystem fatfs;
 // Configuration for the file to open and read:
 #define FILE_NAME      "/forth/ascii_xfer_a001.txt"
 
+File thisFile; // external to any function
+
+void reading(void) {
+  if (thisFile) {
+    while (thisFile.available()) {
+      char c = thisFile.read();
+      Serial.print(c);
+    }
+  }
+  else {
+    Serial.println("Failed to open data file! Does it exist?");
+  }
+}
+
 #define SUPL_FILES
 #undef SUPL_FILES
 
 #ifndef SUPL_FILES
-File thisFile; // external to any function
-
 void fl_setup(void) {
+  reading();
   delay(100); // dummy
 }
 #endif
