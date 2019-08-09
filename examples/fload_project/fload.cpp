@@ -1,6 +1,9 @@
 // Adafruit SPI Flash FatFs Simple Datalogging Example
 // Author: Tony DiCola
 //
+// Fri Aug  9 19:12:29 UTC 2019
+// Modified: wa1tnr, 9 August 2019
+//
 // This is a simple example that opens a file and prints its
 // entire contents to the serial monitor.  Note that
 // you MUST have a flash chip that's formatted with a flash
@@ -40,8 +43,19 @@ Adafruit_SPIFlash flash(&flashTransport);
 FatFileSystem fatfs;
 
 // Configuration for the file to open and read:
-#define FILE_NAME      "data.csv"
+#define FILE_NAME      "/forth/ascii_xfer_a001.txt"
+
+#define SUPL_FILES
+#undef SUPL_FILES
+
+#ifndef SUPL_FILES
+File thisFile; // external to any function
 
 void fl_setup(void) {
   delay(100); // dummy
 }
+#endif
+
+#ifdef SUPL_FILES
+#include "hidden-extra.h"
+#endif
